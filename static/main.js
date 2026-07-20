@@ -1,187 +1,194 @@
 /* =============================================
-   main.js — Gauge, Form Reader, Animations
+   main.js — Dark Toggle, Receipt Items, Stamp, Counter
    ============================================= */
 
 (function () {
     'use strict';
 
-    var MAX_PRICE = 500;
     var reducedMotion = document.documentElement.classList.contains('reduce-motion');
+    var html = document.documentElement;
 
-    /* ---- Helpers ---- */
-    function $(sel, ctx) { return (ctx || document).querySelector(sel); }
-    function $$(sel, ctx) { return Array.from((ctx || document).querySelectorAll(sel)); }
+    /* =============================================
+       THEME TOGGLE
+       ============================================= */
+    var toggle = document.getElementById('themeToggle');
+    if (toggle) {
+        var icon = toggle.querySelector('i');
 
-    /* ---- Gauge ---- */
-    var gaugeFill = $('#gaugeFill');
-    var gaugeNeedle = $('#gaugeNeedle');
-
-    function setGauge(price) {
-        var pct = Math.min(Math.max(price / MAX_PRICE, 0), 1) * 100;
-        if (reducedMotion) {
-            gaugeFill.style.transition = 'none';
-            gaugeNeedle.style.transition = 'none';
-        }
-        gaugeFill.style.width = pct + '%';
-        gaugeNeedle.style.left = pct + '%';
-        gaugeNeedle.classList.add('active');
-    }
-
-    /* ---- Price Tag ---- */
-    function getPriceTag(price) {
-        if (price < 80) return { text: 'Budget', cls: 'tag-budget', icon: 'fa-tag' };
-        if (price < 180) return { text: 'Moderate', cls: 'tag-moderate', icon: 'fa-minus' };
-        if (price < 320) return { text: 'Premium', cls: 'tag-premium', icon: 'fa-arrow-up' };
-        return { text: 'Luxury', cls: 'tag-luxury', icon: 'fa-gem' };
-    }
-
-    function applyPriceTag(price) {
-        var tag = getPriceTag(price);
-        var el = $('#priceTag');
-        if (!el) return;
-        el.className = 'price-tag ' + tag.cls;
-        el.innerHTML = '<i class="fas ' + tag.icon + '"></i> ' + tag.text;
-    }
-
-    /* ---- Animate Price Counter ---- */
-    function animatePrice(target) {
-        var el = $('#priceAmount');
-        var mobileEl = $('#mobilePrice');
-        if (!el) return;
-
-        var display = $('#priceDisplay');
-        var placeholder = $('#panelPlaceholder');
-        if (display) display.style.display = '';
-        if (placeholder) placeholder.style.display = 'none';
-
-        if (reducedMotion) {
-            el.textContent = target.toFixed(2);
-            if (mobileEl) mobileEl.textContent = '$' + target.toFixed(2);
-            setGauge(target);
-            applyPriceTag(target);
-            return;
+        function setIcon(t) {
+            icon.className = t === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
         }
 
-        var start = performance.now();
-        var duration = 1200;
+        setIcon(html.getAttribute('data-theme'));
 
-        function step(now) {
-            var progress = Math.min((now - start) / duration, 1);
-            var eased = 1 - Math.pow(1 - progress, 3);
-            var current = eased * target;
-            el.textContent = current.toFixed(2);
-            if (progress < 1) {
-                requestAnimationFrame(step);
-            } else {
-                el.textContent = target.toFixed(2);
-            }
-        }
-
-        setGauge(target);
-        applyPriceTag(target);
-        requestAnimationFrame(step);
-
-        if (mobileEl) {
-            mobileEl.textContent = '$' + target.toFixed(2);
-        }
+        toggle.addEventListener('click', function () {
+            var current = html.getAttribute('data-theme');
+            var next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            setIcon(next);
+        });
     }
 
-    /* ---- Live Factors ---- */
-    var fieldMap = {
-        city: { icon: 'fa-location-dot', label: 'City' },
-        property_type: { icon: 'fa-building', label: 'Type' },
-        room_type: { icon: 'fa-door-open', label: 'Room' },
-        bedrooms: { icon: 'fa-door-closed', label: 'Beds' },
-        beds: { icon: 'fa-bed', label: 'Bed Count' },
-        bathrooms: { icon: 'fa-bath', label: 'Baths' },
-        accommodates: { icon: 'fa-users', label: 'Sleeps' },
-        instant_bookable: { icon: 'fa-bolt', label: 'Instant' },
-        cancellation_policy: { icon: 'fa-rotate-left', label: 'Cancel' }
-    };
+    /* =============================================
+       RECEIPT ITEMS
+       ============================================= */
+    var fields = [
+        { id: 'city',           icon: 'fa-location-dot',   label: 'City' },
+        { id: 'property_type',  icon: 'fa-building',       label: 'Type' },
+        { id: 'room_type',      icon: 'fa-door-open',      label: 'Room' },
+        { id: 'bed_type',       icon: 'fa-bed',            label: 'Bed Type' },
+        { id: 'bedrooms',       icon: 'fa-door-closed',    label: 'Bedrooms' },
+        { id: 'beds',           icon: 'fa-bed',            label: 'Beds' },
+        { id: 'bathrooms',      icon: 'fa-bath',           label: 'Baths' },
+        { id: 'accommodates',   icon: 'fa-users',          label: 'Guests' },
+        { id: 'cancellation_policy', icon: 'fa-rotate-left', label: 'Cancel' },
+        { id: 'cleaning_fee',   icon: 'fa-sparkles',       label: 'Cleaning' },
+        { id: 'instant_bookable', icon: 'fa-bolt',         label: 'Instant' },
+        { id: 'host_identity_verified', icon: 'fa-shield-halved', label: 'Verified' },
+        { id: 'host_has_profile_pic', icon: 'fa-camera',   label: 'Profile Pic' },
+        { id: 'host_response_rate', icon: 'fa-clock',      label: 'Response Rate' },
+        { id: 'review_scores_rating', icon: 'fa-star',     label: 'Rating' },
+        { id: 'number_of_reviews', icon: 'fa-comments',    label: 'Reviews' },
+        { id: 'amenities',      icon: 'fa-list-check',      label: 'Amenities' },
+    ];
 
-    var boolLabels = { t: 'Yes', f: 'No', True: 'Yes', False: 'No' };
+    var listEl = document.getElementById('rcptItems');
+    var numEl = document.getElementById('rcptNum');
 
-    function readFactors() {
-        var factors = [];
-        var keys = Object.keys(fieldMap);
-        for (var i = 0; i < keys.length; i++) {
-            var key = keys[i];
-            var el = document.getElementById(key);
+    function updateReceipt() {
+        var hasItems = false;
+        var html = '';
+
+        for (var i = 0; i < fields.length; i++) {
+            var el = document.getElementById(fields[i].id);
             if (!el) continue;
             var val = el.value;
-            if (!val || val === '0' || val === '0.0') continue;
-            var cfg = fieldMap[key];
-            var display = boolLabels[val] || val;
-            factors.push(
-                '<li class="factor-item">' +
-                '<span><i class="fas ' + cfg.icon + '"></i> <span class="factor-name">' + cfg.label + '</span></span>' +
-                '<span class="factor-val">' + display + '</span>' +
-                '</li>'
-            );
+            if (val === '' || val === '0' || val === '0.0') continue;
+            hasItems = true;
+
+            var display = val;
+            if (display.length > 24) display = display.substring(0, 22) + '…';
+
+            html += '<div class="rcpt-line">';
+            html += '<i class="fas ' + fields[i].icon + ' line-icon"></i>';
+            html += '<span class="line-label">' + fields[i].label + '</span>';
+            html += '<span class="line-dots"></span>';
+            html += '<span class="line-val">' + display + '</span>';
+            html += '</div>';
         }
-        var list = $('#factorsList');
-        if (!list) return;
-        if (factors.length === 0) {
-            list.innerHTML = '<li class="factor-empty">Enter details to see factors</li>';
-        } else {
-            list.innerHTML = factors.join('');
+
+        if (numEl) {
+            var n = String(Math.floor(Math.random() * 90000) + 10000);
+            numEl.textContent = '#' + n;
         }
+
+        listEl.innerHTML = hasItems ? html : '<div class="rcpt-empty">Enter listing details above</div>';
     }
 
-    /* ---- Bind Form Changes ---- */
-    function bindForm() {
-        var form = $('#predictionForm');
+    function bindFormChanges() {
+        var form = document.getElementById('predictionForm');
         if (!form) return;
-        var inputs = form.querySelectorAll('select, input[type="number"]');
+        var inputs = form.querySelectorAll('select, input');
         for (var i = 0; i < inputs.length; i++) {
-            inputs[i].addEventListener('input', readFactors);
-            inputs[i].addEventListener('change', readFactors);
+            inputs[i].addEventListener('change', updateReceipt);
+            inputs[i].addEventListener('input', updateReceipt);
         }
-        readFactors();
+        updateReceipt();
     }
 
-    /* ---- Button Loading State ---- */
+    /* =============================================
+       STAMP ANIMATION (on page load if result exists)
+       ============================================= */
+    function animateStamp() {
+        var stampWrap = document.getElementById('stampWrap');
+        var totalEl = document.getElementById('rcptTotal');
+        var dividerEl = document.getElementById('totalDivider');
+        var amountEl = document.getElementById('totalAmount');
+        var mobilePrice = document.getElementById('mobilePrice');
+
+        if (!amountEl) return;
+
+        var val = parseFloat(amountEl.textContent.trim());
+        if (isNaN(val) || val <= 0) return;
+
+        // Show elements
+        if (stampWrap) stampWrap.style.display = '';
+        if (totalEl) totalEl.style.display = '';
+        if (dividerEl) dividerEl.style.display = '';
+
+        // Animate price counter
+        if (!reducedMotion) {
+            amountEl.textContent = '0.00';
+            var startTime = null;
+            var duration = 1200;
+
+            function step(ts) {
+                if (!startTime) startTime = ts;
+                var progress = Math.min((ts - startTime) / duration, 1);
+                var eased = 1 - Math.pow(1 - progress, 3);
+                var current = eased * val;
+                amountEl.textContent = current.toFixed(2);
+                if (mobilePrice) {
+                    mobilePrice.textContent = '$' + current.toFixed(2);
+                }
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    amountEl.textContent = val.toFixed(2);
+                    if (mobilePrice) {
+                        mobilePrice.textContent = '$' + val.toFixed(2);
+                    }
+                }
+            }
+
+            requestAnimationFrame(step);
+        } else {
+            amountEl.textContent = val.toFixed(2);
+            if (mobilePrice) {
+                mobilePrice.textContent = '$' + val.toFixed(2);
+            }
+        }
+    }
+
+    /* =============================================
+       FORM SUBMIT LOADING STATE
+       ============================================= */
     function bindSubmit() {
-        var form = $('#predictionForm');
-        var btn = $('#predictBtn');
-        var mobileBtn = $('#mobilePredictBtn');
+        var form = document.getElementById('predictionForm');
+        var btn = document.getElementById('predictBtn');
+        var mobileBtn = document.getElementById('mobilePredictBtn');
+
         if (!form) return;
 
         function setLoading() {
             if (btn) {
-                btn.querySelector('.btn-predict-text').style.display = 'none';
-                btn.querySelector('.btn-predict-loading').style.display = '';
+                btn.querySelector('.btn-text').style.display = 'none';
+                btn.querySelector('.btn-loading').style.display = '';
                 btn.disabled = true;
+            }
+            if (mobileBtn) {
+                mobileBtn.disabled = true;
+                mobileBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
             }
         }
 
-        form.addEventListener('submit', function () {
-            setLoading();
-        });
+        form.addEventListener('submit', setLoading);
 
         if (mobileBtn) {
             mobileBtn.addEventListener('click', function () {
-                setLoading();
+                form.submit();
             });
         }
     }
 
-    /* ---- Init ---- */
+    /* =============================================
+       INIT
+       ============================================= */
     document.addEventListener('DOMContentLoaded', function () {
-        bindForm();
+        bindFormChanges();
         bindSubmit();
-
-        /* If result exists on page load, animate it in */
-        var priceEl = $('#priceAmount');
-        if (priceEl && priceEl.textContent.trim()) {
-            var val = parseFloat(priceEl.textContent.trim());
-            if (!isNaN(val)) {
-                priceEl.textContent = '0.00';
-                setTimeout(function () {
-                    animatePrice(val);
-                }, 300);
-            }
-        }
+        animateStamp();
     });
 
 })();

@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Error — Airbnb Price Prediction</title>
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -11,35 +18,32 @@
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
     <style>
         .error-page {
-            min-height: 100vh;
+            min-height: 80vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 24px;
-            background: var(--parchment);
+            padding: 40px 24px;
         }
-
         .error-card {
-            background: var(--ivory);
+            background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
+            border-radius: 14px;
             padding: 48px 40px;
             max-width: 480px;
             width: 100%;
             text-align: center;
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
         }
-
         .error-card::before {
             content: '';
             position: absolute;
             left: 0; top: 0; bottom: 0;
             width: 4px;
             background: #D32F2F;
+            border-radius: 4px 0 0 4px;
         }
-
         .error-icon {
             width: 60px; height: 60px;
             border-radius: 50%;
@@ -51,20 +55,16 @@
             font-size: 24px;
             color: #D32F2F;
         }
-
         .error-card h2 {
-            font-family: var(--serif);
+            font-family: 'DM Serif Display', Georgia, serif;
             font-size: 22px;
             color: var(--text-primary);
             margin-bottom: 8px;
         }
-
         .error-card > p {
             font-size: 14px;
-            color: var(--stone);
-            margin-bottom: 0;
+            color: var(--text-secondary);
         }
-
         .error-message {
             background: rgba(211,47,47,0.04);
             border: 1px solid rgba(211,47,47,0.12);
@@ -72,23 +72,21 @@
             padding: 14px 16px;
             margin: 20px 0;
             font-size: 13px;
-            color: #7F1D1D;
+            color: #D32F2F;
             text-align: left;
             word-break: break-word;
         }
-
         .error-message i { margin-right: 6px; }
-
         .btn-back {
             display: inline-flex;
             align-items: center;
             gap: 8px;
             padding: 12px 28px;
-            background: var(--midnight);
+            background: var(--accent);
             color: #fff;
             border: none;
             border-radius: 8px;
-            font-family: var(--sans);
+            font-family: 'Inter', sans-serif;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
@@ -96,26 +94,29 @@
             transition: background 0.2s ease, box-shadow 0.2s ease;
             margin-top: 8px;
         }
-
         .btn-back:hover {
-            background: #1E293B;
-            box-shadow: var(--shadow-md);
+            background: var(--accent-hover);
+            box-shadow: var(--shadow-lg);
             color: #fff;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="app-header">
         <div class="header-inner">
             <div class="header-brand">
                 <div class="header-mark">
-                    <i class="fas fa-chart-line"></i>
+                    <i class="fas fa-receipt"></i>
                 </div>
                 <div class="header-text">
                     <h1>Property Price Appraisal</h1>
-                    <p>ML-powered nightly rate estimation for Airbnb hosts</p>
+                    <p>ML-powered rate estimation for Airbnb hosts</p>
                 </div>
+            </div>
+            <div class="header-end">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
         </div>
     </header>
@@ -136,18 +137,22 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="app-footer">
+    <footer class="app-footer" style="margin-bottom:0">
         <div class="footer-inner">
             <span class="footer-text">Built for Airbnb hosts</span>
-            <div class="footer-divider"></div>
+            <span class="footer-middot">·</span>
             <div class="footer-tech">
                 <span><i class="fab fa-python"></i> Python</span>
+                <span class="footer-middot">·</span>
                 <span><i class="fas fa-server"></i> Flask</span>
+                <span class="footer-middot">·</span>
                 <span><i class="fas fa-brain"></i> Machine Learning</span>
+                <span class="footer-middot">·</span>
                 <span><i class="fas fa-cubes"></i> Scikit-Learn</span>
             </div>
         </div>
     </footer>
+
+    <script src="{{url_for('static', filename='main.js')}}"></script>
 </body>
 </html>

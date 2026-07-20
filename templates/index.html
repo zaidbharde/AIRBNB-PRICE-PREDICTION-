@@ -1,14 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Airbnb Price Prediction</title>
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', t);
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('reduce-motion');
+            }
+        })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
 </head>
 <body>
@@ -18,41 +27,43 @@
         <div class="header-inner">
             <div class="header-brand">
                 <div class="header-mark">
-                    <i class="fas fa-chart-line"></i>
+                    <i class="fas fa-receipt"></i>
                 </div>
                 <div class="header-text">
                     <h1>Property Price Appraisal</h1>
-                    <p>ML-powered nightly rate estimation for Airbnb hosts</p>
+                    <p>ML-powered rate estimation for Airbnb hosts</p>
                 </div>
             </div>
-            <div class="header-meta">
-                <div class="meta-pill"><i class="fas fa-database"></i> 100K+ listings</div>
-                <div class="meta-pill"><i class="fas fa-bolt"></i> Real-time</div>
+            <div class="header-end">
+                <span class="header-pill"><i class="fas fa-database"></i> 100K+ listings</span>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
+    <!-- Main Layout -->
     <main class="main-layout">
         <div class="main-inner">
 
-            <!-- Form Column -->
-            <div class="form-column">
+            <!-- FORM COLUMN -->
+            <div class="form-col">
                 <form action="{{url_for('home')}}" method="POST" id="predictionForm" novalidate>
 
-                    <!-- PRIORITY 1 — Location & Property -->
-                    <section class="form-section section-priority-1">
-                        <div class="section-accent"></div>
-                        <div class="section-header">
-                            <span class="section-number">01</span>
+                    <!-- Section 01 — Location & Property (PRIORITY 1) -->
+                    <section class="form-section sec-p1">
+                        <div class="sec-bar"></div>
+                        <div class="sec-head">
+                            <span class="sec-num">01</span>
                             <h2>Location &amp; Property</h2>
-                            <span class="section-badge">Primary Factor</span>
+                            <span class="sec-badge">Primary Factor</span>
                         </div>
-                        <div class="section-body">
-                            <div class="field-row cols-2">
-                                <div class="field">
+                        <div class="sec-body">
+                            <div class="frow frow-2">
+                                <div class="fld">
                                     <label for="city"><i class="fas fa-location-dot"></i> City</label>
-                                    <select name="city" id="city" class="field-input">
+                                    <select name="city" id="city" class="fi">
                                         <option value="NYC">New York</option>
                                         <option value="LA">Los Angeles</option>
                                         <option value="SF">San Francisco</option>
@@ -61,9 +72,9 @@
                                         <option value="DC">Washington, D.C.</option>
                                     </select>
                                 </div>
-                                <div class="field">
+                                <div class="fld">
                                     <label for="property_type"><i class="fas fa-building"></i> Property Type</label>
-                                    <select name="property_type" id="property_type" class="field-input">
+                                    <select name="property_type" id="property_type" class="fi">
                                         <option value="Apartment">Apartment</option>
                                         <option value="Bed & Breakfast">Bed &amp; Breakfast</option>
                                         <option value="Boat">Boat</option>
@@ -72,18 +83,18 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="field-row cols-2">
-                                <div class="field">
+                            <div class="frow frow-2">
+                                <div class="fld">
                                     <label for="room_type"><i class="fas fa-door-open"></i> Room Type</label>
-                                    <select name="room_type" id="room_type" class="field-input">
+                                    <select name="room_type" id="room_type" class="fi">
                                         <option value="Entire home/apt">Entire Home / Apt</option>
                                         <option value="Private room">Private Room</option>
                                         <option value="Shared room">Shared Room</option>
                                     </select>
                                 </div>
-                                <div class="field">
+                                <div class="fld">
                                     <label for="bed_type"><i class="fas fa-bed"></i> Bed Type</label>
-                                    <select name="bed_type" id="bed_type" class="field-input">
+                                    <select name="bed_type" id="bed_type" class="fi">
                                         <option value="Real Bed">Real Bed</option>
                                         <option value="Pull-out Sofa">Pull-out Sofa</option>
                                         <option value="Futon">Futon</option>
@@ -92,60 +103,60 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="field-row cols-2">
-                                <div class="field">
+                            <div class="frow frow-2">
+                                <div class="fld">
                                     <label for="latitude"><i class="fas fa-globe"></i> Latitude</label>
-                                    <input type="number" name="latitude" id="latitude" class="field-input" value="0.0" step="0.000001" placeholder="e.g. 40.7128">
+                                    <input type="number" name="latitude" id="latitude" class="fi" value="0.0" step="0.000001" placeholder="e.g. 40.7128">
                                 </div>
-                                <div class="field">
+                                <div class="fld">
                                     <label for="longitude"><i class="fas fa-globe-americas"></i> Longitude</label>
-                                    <input type="number" name="longitude" id="longitude" class="field-input" value="0.0" step="0.000001" placeholder="e.g. -74.0060">
+                                    <input type="number" name="longitude" id="longitude" class="fi" value="0.0" step="0.000001" placeholder="e.g. -74.0060">
                                 </div>
                             </div>
                         </div>
                     </section>
 
-                    <!-- PRIORITY 2 — Space & Configuration -->
-                    <section class="form-section section-priority-2">
-                        <div class="section-accent"></div>
-                        <div class="section-header">
-                            <span class="section-number">02</span>
+                    <!-- Section 02 — Space (PRIORITY 2) -->
+                    <section class="form-section sec-p2">
+                        <div class="sec-bar"></div>
+                        <div class="sec-head">
+                            <span class="sec-num">02</span>
                             <h2>Space &amp; Configuration</h2>
                         </div>
-                        <div class="section-body">
-                            <div class="field-row cols-4">
-                                <div class="field">
+                        <div class="sec-body">
+                            <div class="frow frow-4">
+                                <div class="fld">
                                     <label for="bedrooms"><i class="fas fa-door-closed"></i> Bedrooms</label>
-                                    <input type="number" name="bedrooms" id="bedrooms" class="field-input" value="0" min="0" max="10">
+                                    <input type="number" name="bedrooms" id="bedrooms" class="fi" value="0" min="0" max="10">
                                 </div>
-                                <div class="field">
+                                <div class="fld">
                                     <label for="beds"><i class="fas fa-bed"></i> Beds</label>
-                                    <input type="number" name="beds" id="beds" class="field-input" value="0" min="0" max="18">
+                                    <input type="number" name="beds" id="beds" class="fi" value="0" min="0" max="18">
                                 </div>
-                                <div class="field">
+                                <div class="fld">
                                     <label for="bathrooms"><i class="fas fa-bath"></i> Bathrooms</label>
-                                    <input type="number" name="bathrooms" id="bathrooms" class="field-input" value="0" min="0" max="8">
+                                    <input type="number" name="bathrooms" id="bathrooms" class="fi" value="0" min="0" max="8">
                                 </div>
-                                <div class="field">
+                                <div class="fld">
                                     <label for="accommodates"><i class="fas fa-users"></i> Accommodates</label>
-                                    <input type="number" name="accommodates" id="accommodates" class="field-input" value="1" min="1" max="16">
+                                    <input type="number" name="accommodates" id="accommodates" class="fi" value="1" min="1" max="16">
                                 </div>
                             </div>
                         </div>
                     </section>
 
-                    <!-- PRIORITY 3 — Booking Details -->
-                    <section class="form-section section-priority-3">
-                        <div class="section-accent"></div>
-                        <div class="section-header">
-                            <span class="section-number">03</span>
+                    <!-- Section 03 — Booking (PRIORITY 3) -->
+                    <section class="form-section sec-p3">
+                        <div class="sec-bar"></div>
+                        <div class="sec-head">
+                            <span class="sec-num">03</span>
                             <h2>Booking &amp; Policies</h2>
                         </div>
-                        <div class="section-body">
-                            <div class="field-row cols-3">
-                                <div class="field">
+                        <div class="sec-body">
+                            <div class="frow frow-3">
+                                <div class="fld">
                                     <label for="cancellation_policy"><i class="fas fa-rotate-left"></i> Cancellation</label>
-                                    <select name="cancellation_policy" id="cancellation_policy" class="field-input">
+                                    <select name="cancellation_policy" id="cancellation_policy" class="fi">
                                         <option value="flexible">Flexible</option>
                                         <option value="moderate">Moderate</option>
                                         <option value="strict">Strict</option>
@@ -153,16 +164,16 @@
                                         <option value="super_strict_60">Super Strict 60</option>
                                     </select>
                                 </div>
-                                <div class="field">
+                                <div class="fld">
                                     <label for="cleaning_fee"><i class="fas fa-sparkles"></i> Cleaning Fee</label>
-                                    <select name="cleaning_fee" id="cleaning_fee" class="field-input">
+                                    <select name="cleaning_fee" id="cleaning_fee" class="fi">
                                         <option value="True">Yes</option>
                                         <option value="False">No</option>
                                     </select>
                                 </div>
-                                <div class="field">
+                                <div class="fld">
                                     <label for="instant_bookable"><i class="fas fa-bolt"></i> Instant Booking</label>
-                                    <select name="instant_bookable" id="instant_bookable" class="field-input">
+                                    <select name="instant_bookable" id="instant_bookable" class="fi">
                                         <option value="t">Yes</option>
                                         <option value="f">No</option>
                                     </select>
@@ -171,46 +182,46 @@
                         </div>
                     </section>
 
-                    <!-- PRIORITY 3 — Host & Reviews -->
-                    <section class="form-section section-priority-3">
-                        <div class="section-accent"></div>
-                        <div class="section-header">
-                            <span class="section-number">04</span>
+                    <!-- Section 04 — Host & Reviews (PRIORITY 3) -->
+                    <section class="form-section sec-p3">
+                        <div class="sec-bar"></div>
+                        <div class="sec-head">
+                            <span class="sec-num">04</span>
                             <h2>Host &amp; Reviews</h2>
                         </div>
-                        <div class="section-body">
-                            <div class="field-row cols-3">
-                                <div class="field">
+                        <div class="sec-body">
+                            <div class="frow frow-3">
+                                <div class="fld">
                                     <label for="host_identity_verified"><i class="fas fa-shield-halved"></i> Verified Host</label>
-                                    <select name="host_identity_verified" id="host_identity_verified" class="field-input">
+                                    <select name="host_identity_verified" id="host_identity_verified" class="fi">
                                         <option value="t">Yes</option>
                                         <option value="f">No</option>
                                     </select>
                                 </div>
-                                <div class="field">
+                                <div class="fld">
                                     <label for="host_has_profile_pic"><i class="fas fa-camera"></i> Profile Picture</label>
-                                    <select name="host_has_profile_pic" id="host_has_profile_pic" class="field-input">
+                                    <select name="host_has_profile_pic" id="host_has_profile_pic" class="fi">
                                         <option value="t">Yes</option>
                                         <option value="f">No</option>
                                     </select>
                                 </div>
-                                <div class="field">
+                                <div class="fld">
                                     <label for="host_response_rate"><i class="fas fa-clock"></i> Response Rate</label>
-                                    <input type="number" name="host_response_rate" id="host_response_rate" class="field-input" value="0" min="0" max="100" placeholder="%">
+                                    <input type="number" name="host_response_rate" id="host_response_rate" class="fi" value="0" min="0" max="100" placeholder="%">
                                 </div>
                             </div>
-                            <div class="field-row cols-3">
-                                <div class="field">
+                            <div class="frow frow-3">
+                                <div class="fld">
                                     <label for="review_scores_rating"><i class="fas fa-star-half-stroke"></i> Review Rating</label>
-                                    <input type="number" name="review_scores_rating" id="review_scores_rating" class="field-input" value="0" min="0" max="100" placeholder="0–100">
+                                    <input type="number" name="review_scores_rating" id="review_scores_rating" class="fi" value="0" min="0" max="100" placeholder="0–100">
                                 </div>
-                                <div class="field">
+                                <div class="fld">
                                     <label for="number_of_reviews"><i class="fas fa-comments"></i> Number of Reviews</label>
-                                    <input type="number" name="number_of_reviews" id="number_of_reviews" class="field-input" value="0" min="0" max="1000">
+                                    <input type="number" name="number_of_reviews" id="number_of_reviews" class="fi" value="0" min="0" max="1000">
                                 </div>
-                                <div class="field">
+                                <div class="fld">
                                     <label for="amenities"><i class="fas fa-list-check"></i> Amenities</label>
-                                    <input type="number" name="amenities" id="amenities" class="field-input" value="2" min="2" max="1496">
+                                    <input type="number" name="amenities" id="amenities" class="fi" value="2" min="2" max="1496">
                                 </div>
                             </div>
                         </div>
@@ -219,73 +230,65 @@
                 </form>
             </div>
 
-            <!-- Estimate Panel (Desktop) -->
-            <aside class="estimate-column">
-                <div class="estimate-panel">
+            <!-- RECEIPT COLUMN -->
+            <aside class="receipt-col">
+                <div class="receipt-panel" id="receiptPanel">
 
-                    <div class="panel-header">
-                        <span class="panel-label">Price Estimate</span>
+                    <!-- Receipt Header -->
+                    <div class="rcpt-head">
+                        <i class="fas fa-receipt rcpt-head-icon"></i>
+                        <div>
+                            <span class="rcpt-head-label">Appraisal Receipt</span>
+                            <span class="rcpt-head-num" id="rcptNum">#----</span>
+                        </div>
                         {% if final_result is defined and final_result is not none %}
-                        <span class="panel-status status-ready"><i class="fas fa-circle-check"></i> Appraised</span>
+                        <span class="rcpt-badge badge-ready"><i class="fas fa-circle-check"></i> Appraised</span>
                         {% else %}
-                        <span class="panel-status status-pending"><i class="fas fa-circle"></i> Awaiting Input</span>
+                        <span class="rcpt-badge badge-pending"><i class="fas fa-circle"></i> Draft</span>
                         {% endif %}
                     </div>
 
-                    <!-- Gauge -->
-                    <div class="gauge-wrap">
-                        <div class="gauge-track" id="gaugeTrack">
-                            <div class="gauge-fill" id="gaugeFill"></div>
-                            <div class="gauge-needle" id="gaugeNeedle"></div>
-                        </div>
-                        <div class="gauge-labels">
-                            <span>$0</span>
-                            <span>$125</span>
-                            <span>$250</span>
-                            <span>$375</span>
-                            <span>$500</span>
-                        </div>
+                    <div class="rcpt-divider"></div>
+
+                    <!-- Receipt Items (live from JS) -->
+                    <div class="rcpt-items" id="rcptItems">
+                        <div class="rcpt-empty">Enter listing details above</div>
                     </div>
 
-                    <!-- Price Display -->
-                    <div class="price-display" id="priceDisplay"
+                    <div class="rcpt-divider" id="totalDivider" {% if final_result is not defined or final_result is none %}style="display:none"{% endif %}></div>
+
+                    <!-- Receipt Total (server-rendered on POST) -->
+                    <div class="rcpt-total" id="rcptTotal"
                          {% if final_result is not defined or final_result is none %}style="display:none"{% endif %}>
-                        <div class="price-value">
-                            <span class="price-dollar">$</span>
-                            <span class="price-amount" id="priceAmount">{% if final_result is defined and final_result is not none %}{{ final_result }}{% endif %}</span>
-                        </div>
-                        <div class="price-meta">
-                            <span class="price-tag" id="priceTag"></span>
-                            <span class="price-confidence"><i class="fas fa-shield-halved"></i> Model confidence: 96%</span>
+                        <div class="total-row">
+                            <span class="total-label">TOTAL</span>
+                            <span class="total-dots"></span>
+                            <span class="total-value">$<span id="totalAmount">{{ final_result }}</span></span>
                         </div>
                     </div>
 
-                    <div class="panel-placeholder" id="panelPlaceholder"
+                    <!-- Placeholder (shown when no result) -->
+                    <div class="rcpt-placeholder" id="rcptPlaceholder"
                          {% if final_result is defined and final_result is not none %}style="display:none"{% endif %}>
-                        <i class="fas fa-receipt"></i>
-                        <p>Fill the form to build<br>your property appraisal</p>
+                        <i class="fas fa-plus"></i>
+                        <p>Adjust the inputs —<br>your estimate appears here</p>
                     </div>
 
-                    <div class="panel-divider"></div>
-
-                    <!-- Key Factors -->
-                    <div class="factors-section">
-                        <span class="factors-title">Key Factors</span>
-                        <ul class="factors-list" id="factorsList">
-                            <li class="factor-empty">Enter details to see factors</li>
-                        </ul>
+                    <!-- Appraisal Stamp (shown on POST) -->
+                    <div class="stamp-wrap" id="stampWrap"
+                         {% if final_result is not defined or final_result is none %}style="display:none"{% endif %}>
+                        <div class="stamp" id="stamp">
+                            <div class="stamp-inner">
+                                <i class="fas fa-stamp"></i>
+                                <span>APPRAISED</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="panel-divider"></div>
 
                     <!-- Predict Button -->
-                    <button type="submit" form="predictionForm" class="btn-predict" id="predictBtn">
-                        <span class="btn-predict-text">
-                            <i class="fas fa-chart-line"></i> Run Appraisal
-                        </span>
-                        <span class="btn-predict-loading" style="display:none">
-                            <i class="fas fa-circle-notch fa-spin"></i> Analyzing...
-                        </span>
+                    <button type="submit" form="predictionForm" class="btn-run" id="predictBtn">
+                        <span class="btn-text"><i class="fas fa-calculator"></i> Run Appraisal</span>
+                        <span class="btn-loading" style="display:none"><i class="fas fa-circle-notch fa-spin"></i> Analyzing...</span>
                     </button>
 
                 </div>
@@ -294,7 +297,7 @@
         </div>
     </main>
 
-    <!-- Mobile Estimate Bar -->
+    <!-- Mobile Bar -->
     <div class="mobile-bar" id="mobileBar">
         <div class="mobile-bar-inner">
             <div class="mobile-bar-info">
@@ -306,44 +309,28 @@
                 {% endif %}
             </div>
             <button type="submit" form="predictionForm" class="mobile-bar-btn" id="mobilePredictBtn">
-                <i class="fas fa-chart-line"></i> Appraise
+                <i class="fas fa-calculator"></i> Appraise
             </button>
         </div>
     </div>
-
-    <!-- Prediction Result (revealed on POST) -->
-    {% if final_result is defined and final_result is not none %}
-    <div class="result-banner" id="resultBanner">
-        <div class="result-banner-inner">
-            <div class="result-stamp">
-                <i class="fas fa-stamp"></i>
-                <span>Estimate Ready</span>
-            </div>
-        </div>
-    </div>
-    {% endif %}
 
     <!-- Footer -->
     <footer class="app-footer">
         <div class="footer-inner">
             <span class="footer-text">Built for Airbnb hosts</span>
-            <div class="footer-divider"></div>
+            <span class="footer-middot">·</span>
             <div class="footer-tech">
                 <span><i class="fab fa-python"></i> Python</span>
+                <span class="footer-middot">·</span>
                 <span><i class="fas fa-server"></i> Flask</span>
+                <span class="footer-middot">·</span>
                 <span><i class="fas fa-brain"></i> Machine Learning</span>
+                <span class="footer-middot">·</span>
                 <span><i class="fas fa-cubes"></i> Scikit-Learn</span>
             </div>
         </div>
     </footer>
 
-    <!-- Accessibility: reduced motion detection -->
-    <script>
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            document.documentElement.classList.add('reduce-motion');
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{url_for('static', filename='main.js')}}"></script>
 </body>
 </html>
