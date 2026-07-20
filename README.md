@@ -1,30 +1,69 @@
-# 🏠 Airbnb Price Prediction — End to End ML Project
+<div align="center">
 
-A Machine Learning-powered web application that predicts Airbnb listing prices based on property details, location, host information, amenities, and review metrics. Built with a Flask front end and a trained regression model served through a modular ML pipeline.
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=2,6,12,20&height=200&section=header&text=Airbnb%20Price%20Predictor&fontSize=42&fontColor=ffffff&animation=fadeIn&fontAlignY=35&desc=Predict%20fair%2C%20data-driven%20Airbnb%20prices%20with%20ML&descAlignY=55&descSize=18" width="100%"/>
 
-![Python](https://img.shields.io/badge/Python-3.x-blue)
-![Flask](https://img.shields.io/badge/Flask-Web%20App-black)
-![XGBoost](https://img.shields.io/badge/XGBoost-ML%20Model-orange)
-![License](https://img.shields.io/badge/License-MIT-green)
+<a href="https://github.com/zaidbharde/AIRBNB-PRICE-PREDICTION-">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&pause=1000&color=FF5A5F&center=true&vCenter=true&width=600&lines=End-to-End+ML+Web+App;Predicts+Fair+Airbnb+Prices;Flask+%2B+XGBoost+%2B+CatBoost;Built+by+Zaid+Bharde" alt="Typing SVG" />
+</a>
+
+<br/>
+
+![Python](https://img.shields.io/badge/Python-3.10-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-Web%20App-000000?style=for-the-badge&logo=flask&logoColor=white)
+![XGBoost](https://img.shields.io/badge/XGBoost-ML%20Model-FF6600?style=for-the-badge)
+![CatBoost](https://img.shields.io/badge/CatBoost-ML%20Model-FFCC00?style=for-the-badge)
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-3DA639?style=for-the-badge)
+
+![GitHub last commit](https://img.shields.io/github/last-commit/zaidbharde/AIRBNB-PRICE-PREDICTION-?style=flat-square&color=success)
+![GitHub repo size](https://img.shields.io/github/repo-size/zaidbharde/AIRBNB-PRICE-PREDICTION-?style=flat-square)
+![GitHub stars](https://img.shields.io/github/stars/zaidbharde/AIRBNB-PRICE-PREDICTION-?style=flat-square&color=yellow)
+
+</div>
 
 ---
 
 ## 📌 Overview
 
-Airbnb hosts constantly struggle to price their listings competitively — price too high and the listing sits empty, price too low and money is left on the table. This project uses data science and machine learning to predict a fair, data-driven price for a listing based on factors like location, property type, amenities, host details, and guest reviews.
+Airbnb hosts constantly struggle to price their listings competitively — price too high and the listing sits empty, price too low and money is left on the table. This project uses data science and machine learning to predict a **fair, data-driven price** for a listing based on factors like location, property type, amenities, host details, and guest reviews.
 
-The goal is to give hosts a quick, reliable price estimate and give guests a sense of whether a listing is fairly priced.
+The goal: give hosts a quick, reliable price estimate — and give guests a sense of whether a listing is fairly priced.
 
 ---
 
 ## ✨ Features
 
-- 🔮 Real-time price prediction through a simple web interface
-- 📊 End-to-end ML pipeline: data ingestion → transformation → model training → prediction
-- 🧠 Trained regression models (XGBoost / CatBoost) on Airbnb listing data
-- 🐳 Docker support for easy, environment-free deployment
-- 📈 Experiment tracking via DVC and Jupyter notebooks
-- 🌐 Flask-based web app with a clean, user-friendly UI
+| | |
+|---|---|
+| 🔮 | Real-time price prediction through a simple web interface |
+| 📊 | End-to-end ML pipeline: ingestion → transformation → training → prediction |
+| 🧠 | Trained regression models (XGBoost / CatBoost) on real Airbnb listing data |
+| 🐳 | Docker support for one-command, environment-free deployment |
+| 📈 | Experiment tracking via DVC and Jupyter notebooks |
+| 🌐 | Flask-based web app with a clean, responsive UI |
+
+---
+
+## 🛠️ Tech Stack
+
+<div align="center">
+
+![Skills](https://skillicons.dev/icons?i=python,flask,docker,sklearn,html,css,js&theme=dark)
+
+</div>
+
+<div align="center">
+
+| Category | Tools |
+|---|---|
+| Language | Python |
+| ML / Data | Numpy, Pandas, Scikit-learn, XGBoost, CatBoost |
+| Visualization | Matplotlib, Seaborn |
+| Web Framework | Flask |
+| Experiment Tracking | DVC |
+| Deployment | Docker |
+
+</div>
 
 ---
 
@@ -44,19 +83,6 @@ AIRBNB-PRICE-PREDICTION/
 ├── requirements.txt           # Python dependencies
 └── README.md
 ```
-
----
-
-## 🛠️ Tech Stack
-
-| Category | Tools |
-|---|---|
-| Language | Python |
-| ML / Data | Numpy, Pandas, Scikit-learn, XGBoost, CatBoost |
-| Visualization | Matplotlib, Seaborn |
-| Web Framework | Flask |
-| Experiment Tracking | DVC |
-| Deployment | Docker |
 
 ---
 
@@ -111,11 +137,20 @@ Then open `http://localhost:5000` in your browser.
 2. Enter listing details — location, property type, number of bedrooms/bathrooms, amenities, host info, and review metrics.
 3. Click **Predict** to get an estimated price for the listing.
 
+<div align="center">
+
+<!-- Replace this with an actual screen recording of your app -->
+<img src="static/demo.gif" width="80%" alt="App demo — replace with your own screen recording"/>
+
+</div>
+
+> 💡 **Tip:** Record a quick screen capture of the app in action (e.g. with [ScreenToGif](https://www.screentogif.com/) on Windows or [Peek](https://github.com/phw/peek) on Linux), save it as `static/demo.gif`, and commit it. A live demo GIF is the single best thing you can add to this README — it's worth more than any badge.
+
 ---
 
 ## 🧪 Model Development
 
-Model experimentation and EDA can be found in `Notebook_Experiments/`. The pipeline follows a modular structure:
+Model experimentation and EDA live in `Notebook_Experiments/`. The pipeline follows a modular structure:
 
 1. **Data Ingestion** — loads and splits the raw Airbnb dataset
 2. **Data Transformation** — handles preprocessing, encoding, and feature engineering
@@ -142,3 +177,11 @@ This project is open source and available under the [MIT License](LICENSE).
 ## 🙏 Acknowledgements
 
 This project was inspired by Kaggle's Airbnb Price Prediction dataset and competition, along with the open-source Python libraries used throughout — Scikit-learn, XGBoost, CatBoost, and Flask.
+
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=2,6,12,20&height=100&section=footer" width="100%"/>
+
+⭐ **If this project helped you, consider giving it a star!** ⭐
+
+</div>
