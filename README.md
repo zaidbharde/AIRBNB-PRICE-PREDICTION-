@@ -1,106 +1,144 @@
-# End to End Airbnb-Price-Prediction 
+# 🏠 Airbnb Price Prediction — End to End ML Project
 
-## Introduction
-In today's fast-paced world, the way we travel and seek accommodations has undergone a remarkable transformation, thanks to platforms like Airbnb. This dynamic marketplace has empowered property owners and travellers, offering a diverse range of lodging options. However, one enduring challenge is setting the right price for a listing. Hosts aspire to optimize their earnings while ensuring competitive pricing, while guests seek value for their money. Balancing these interests can be intricate, and that's where the motivation for Airbnb price prediction comes in.
+A Machine Learning-powered web application that predicts Airbnb listing prices based on property details, location, host information, amenities, and review metrics. Built with a Flask front end and a trained regression model served through a modular ML pipeline.
 
-## Motivation 
-To harness the power of data science and machine learning to provide more accurate and data-driven pricing strategies for Airbnb hosts and guests. By developing predictive models that factor in myriad variables such as location, property type, and market dynamics, the objective is to help hosts maximize their income and guests find fair deals. In this exploration of Airbnb price prediction, we will delve into methodologies, data sources, and emerging trends, shedding light on how technology is enhancing the overall Airbnb experience for both hosts and travellers.
+![Python](https://img.shields.io/badge/Python-3.x-blue)
+![Flask](https://img.shields.io/badge/Flask-Web%20App-black)
+![XGBoost](https://img.shields.io/badge/XGBoost-ML%20Model-orange)
+![License](https://img.shields.io/badge/License-MIT-green)
 
+---
 
-# Installation Guide
+## 📌 Overview
 
-This guide provides step-by-step instructions on how to install and set up the Airbnb Price Prediction project. You can choose to install it either directly from GitHub or using a Docker container from DockerHub.
+Airbnb hosts constantly struggle to price their listings competitively — price too high and the listing sits empty, price too low and money is left on the table. This project uses data science and machine learning to predict a fair, data-driven price for a listing based on factors like location, property type, amenities, host details, and guest reviews.
 
-## Prerequisites
+The goal is to give hosts a quick, reliable price estimate and give guests a sense of whether a listing is fairly priced.
 
-Before you begin, make sure you have the following prerequisites installed on your system:
+---
 
- - Numpy
- - Pandas
- - Seaborn
- - Matplotlib
- - Scikit-learn
- - xgboost
- - Flask
- - Pillow
- - Catboost
- - DVC
+## ✨ Features
 
-## Installation Steps
+- 🔮 Real-time price prediction through a simple web interface
+- 📊 End-to-end ML pipeline: data ingestion → transformation → model training → prediction
+- 🧠 Trained regression models (XGBoost / CatBoost) on Airbnb listing data
+- 🐳 Docker support for easy, environment-free deployment
+- 📈 Experiment tracking via DVC and Jupyter notebooks
+- 🌐 Flask-based web app with a clean, user-friendly UI
 
-### Option 1: Installation from GitHub
+---
 
-Follow these steps to install and set up the project directly from the GitHub repository:
+## 🗂️ Project Structure
 
-1. **Clone the Repository**
-   - Open your terminal or command prompt.
-   - Navigate to the directory where you want to install the project.
-   - Run the following command to clone the GitHub repository:
-     ```
-     git clone https://github.com/KalyanMurapaka45/Airbnb-Price-Prediction.git
-     ```
+```
+AIRBNB-PRICE-PREDICTION/
+├── src/Airbnb/              # Core package: pipeline, components, utils
+├── Notebook_Experiments/    # EDA and model experimentation notebooks
+├── Artifacts/               # Generated artifacts (processed data, trained models)
+├── static/                  # CSS/JS/static assets for the web app
+├── templates/                # HTML templates for the Flask app
+├── app.py                   # Flask application entry point
+├── setup.py                  # Package setup
+├── template.py               # Project scaffolding script
+├── Dockerfile                 # Container build configuration
+├── requirements.txt           # Python dependencies
+└── README.md
+```
 
-2. **Create a Virtual Environment** (Optional but recommended)
-   - It's a good practice to create a virtual environment to manage project dependencies. Run the following command:
-     ```
-     conda create -p <Environment_Name> python==<python version> -y
-     ```
+---
 
-3. **Activate the Virtual Environment** (Optional)
-   - Activate the virtual environment based on your operating system:
-       ```
-       conda activate <Environment_Name>/
-       ```
+## 🛠️ Tech Stack
 
-4. **Install Dependencies**
-   - Navigate to the project directory:
-     ```
-     cd [project_directory]
-     ```
-   - Run the following command to install project dependencies:
-     ```
-     pip install -r requirements.txt
-     ```
+| Category | Tools |
+|---|---|
+| Language | Python |
+| ML / Data | Numpy, Pandas, Scikit-learn, XGBoost, CatBoost |
+| Visualization | Matplotlib, Seaborn |
+| Web Framework | Flask |
+| Experiment Tracking | DVC |
+| Deployment | Docker |
 
-5. **Run the Project**
-   - Start the project by running the appropriate command.
-     ```
-     python app.py
-     ```
+---
 
-6. **Access the Project**
-   - Open a web browser or the appropriate client to access the project.
-  
-<br><br>
-### Option 2: Installation from DockerHub
+## ⚙️ Installation
 
-If you prefer to use Docker, you can install and run the project using a Docker container from DockerHub:
+### Prerequisites
 
-1. **Pull the Docker Image**
-   - Open your terminal or command prompt.
-   - Run the following command to pull the Docker image from DockerHub:
-     ```
-     docker pull kalyan45/airbnb-app
-     ```
+Make sure you have Python installed along with the following packages (all listed in `requirements.txt`):
 
-2. **Run the Docker Container**
-   - Start the Docker container by running the following command, mapping any necessary ports:
-     ```
-     docker run -p 5000:5000 kalyan45/airbnb-app
-     ```
+- Numpy, Pandas, Seaborn, Matplotlib
+- Scikit-learn, XGBoost, CatBoost
+- Flask, Pillow
+- DVC
 
-3. **Access the Project**
-   - Open a web browser or the appropriate client to access the project.
+### Option 1: Run from Source
 
-## Troubleshooting
+```bash
+# 1. Clone the repository
+git clone https://github.com/zaidbharde/AIRBNB-PRICE-PREDICTION-.git
+cd AIRBNB-PRICE-PREDICTION-
 
-- If you encounter any issues during the installation process, Contact me at ```kalyanmurapaka274@gmail.com```
+# 2. Create a virtual environment (recommended)
+conda create -p venv python==3.10 -y
+conda activate venv/
 
+# 3. Install dependencies
+pip install -r requirements.txt
 
-# Contributing
+# 4. Run the app
+python app.py
+```
 
-We welcome contributions from the community! If you have any ideas or suggestions for improving the project, please feel free to create an issue or submit a pull request.
+Then open `http://localhost:5000` in your browser.
 
-# Acknowledgements
+### Option 2: Run with Docker
 
-This project was inspired by the Kaggle dataset on AirBNB Price Prediction and the corresponding competition. We also acknowledge the open-source Python libraries used in this project and their contributors.
+```bash
+# Build the image locally
+docker build -t airbnb-price-prediction .
+
+# Run the container
+docker run -p 5000:5000 airbnb-price-prediction
+```
+
+Then open `http://localhost:5000` in your browser.
+
+---
+
+## 🚀 Usage
+
+1. Launch the app using either method above.
+2. Enter listing details — location, property type, number of bedrooms/bathrooms, amenities, host info, and review metrics.
+3. Click **Predict** to get an estimated price for the listing.
+
+---
+
+## 🧪 Model Development
+
+Model experimentation and EDA can be found in `Notebook_Experiments/`. The pipeline follows a modular structure:
+
+1. **Data Ingestion** — loads and splits the raw Airbnb dataset
+2. **Data Transformation** — handles preprocessing, encoding, and feature engineering
+3. **Model Training** — trains and evaluates regression models (XGBoost, CatBoost)
+4. **Prediction Pipeline** — serves predictions through the Flask app
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! If you have ideas for improving the model, pipeline, or UI, feel free to open an issue or submit a pull request.
+
+1. Fork the repo
+2. Create a feature branch (`git checkout -b feature/your-feature`)
+3. Commit your changes
+4. Push and open a PR
+
+---
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🙏 Acknowledgements
+
+This project was inspired by Kaggle's Airbnb Price Prediction dataset and competition, along with the open-source Python libraries used throughout — Scikit-learn, XGBoost, CatBoost, and Flask.
