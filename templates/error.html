@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error — Airbnb Price Prediction</title>
+    <title>Error — Airbnb Price Predictor</title>
     <script>
         (function() {
             var t = localStorage.getItem('theme');
@@ -13,9 +13,9 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
     <style>
         .error-page {
             min-height: 80vh;
@@ -27,14 +27,15 @@
         .error-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 14px;
+            border-radius: 20px;
             padding: 48px 40px;
             max-width: 480px;
             width: 100%;
             text-align: center;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-lg);
             position: relative;
             overflow: hidden;
+            animation: fadeSlideUp 0.5s ease both;
         }
         .error-card::before {
             content: '';
@@ -44,111 +45,102 @@
             background: #D32F2F;
             border-radius: 4px 0 0 4px;
         }
-        .error-icon {
-            width: 60px; height: 60px;
+        .error-icon-wrap {
+            width: 68px; height: 68px;
             border-radius: 50%;
-            background: rgba(211,47,47,0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 24px;
+            background: rgba(211,47,47,0.1);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 28px;
             color: #D32F2F;
         }
         .error-card h2 {
-            font-family: 'DM Serif Display', Georgia, serif;
-            font-size: 22px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
             color: var(--text-primary);
             margin-bottom: 8px;
         }
         .error-card > p {
-            font-size: 14px;
+            font-size: 15px;
             color: var(--text-secondary);
         }
         .error-message {
             background: rgba(211,47,47,0.04);
             border: 1px solid rgba(211,47,47,0.12);
-            border-radius: 8px;
-            padding: 14px 16px;
-            margin: 20px 0;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 24px 0;
             font-size: 13px;
             color: #D32F2F;
             text-align: left;
             word-break: break-word;
         }
-        .error-message i { margin-right: 6px; }
-        .btn-back {
+        .error-message i { margin-right: 8px; }
+        .btn-error-back {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 28px;
-            background: var(--accent);
+            padding: 14px 32px;
+            background: var(--primary);
             color: #fff;
             border: none;
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
+            border-radius: 14px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             text-decoration: none;
-            transition: background 0.2s ease, box-shadow 0.2s ease;
-            margin-top: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(255,90,95,0.35);
         }
-        .btn-back:hover {
-            background: var(--accent-hover);
-            box-shadow: var(--shadow-lg);
+        .btn-error-back:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 8px 24px rgba(255,90,95,0.45);
+            transform: translateY(-2px);
             color: #fff;
         }
     </style>
 </head>
 <body>
-    <header class="app-header">
-        <div class="header-inner">
-            <div class="header-brand">
-                <div class="header-mark">
-                    <i class="fas fa-receipt"></i>
-                </div>
-                <div class="header-text">
-                    <h1>Property Price Appraisal</h1>
-                    <p>ML-powered rate estimation for Airbnb hosts</p>
-                </div>
-            </div>
-            <div class="header-end">
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+    <nav class="navbar-custom">
+        <div class="nav-inner">
+            <a href="/" class="nav-brand">
+                <div class="nav-logo"><i class="fab fa-airbnb"></i></div>
+                <span class="nav-title">Price Predictor</span>
+            </a>
+            <div class="nav-end">
+                <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">
                     <i class="fas fa-moon"></i>
                 </button>
             </div>
         </div>
-    </header>
+    </nav>
 
     <div class="error-page">
         <div class="error-card">
-            <div class="error-icon">
+            <div class="error-icon-wrap">
                 <i class="fas fa-triangle-exclamation"></i>
             </div>
-            <h2>Appraisal Error</h2>
-            <p>Something went wrong during the prediction process.</p>
+            <h2>Prediction Failed</h2>
+            <p>An error occurred while processing your request.</p>
             <div class="error-message">
                 <i class="fas fa-circle-info"></i> {{ error_message }}
             </div>
-            <a href="/" class="btn-back">
+            <a href="/" class="btn-error-back">
                 <i class="fas fa-arrow-left"></i> Try Again
             </a>
         </div>
     </div>
 
-    <footer class="app-footer" style="margin-bottom:0">
-        <div class="footer-inner">
-            <span class="footer-text">Built for Airbnb hosts</span>
-            <span class="footer-middot">·</span>
-            <div class="footer-tech">
-                <span><i class="fab fa-python"></i> Python</span>
-                <span class="footer-middot">·</span>
-                <span><i class="fas fa-server"></i> Flask</span>
-                <span class="footer-middot">·</span>
-                <span><i class="fas fa-brain"></i> Machine Learning</span>
-                <span class="footer-middot">·</span>
-                <span><i class="fas fa-cubes"></i> Scikit-Learn</span>
+    <footer class="footer-custom">
+        <div class="container">
+            <div class="footer-inner-custom">
+                <div class="footer-brand">
+                    <i class="fab fa-airbnb"></i>
+                    <span>Airbnb Price Predictor</span>
+                </div>
+                <p class="footer-text">Built with <i class="fas fa-heart" style="color: #FF5A5F;"></i> for Airbnb hosts worldwide</p>
             </div>
         </div>
     </footer>
