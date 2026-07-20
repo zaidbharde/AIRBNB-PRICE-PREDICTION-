@@ -5,566 +5,297 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Airbnb Price Predictor</title>
     <script>
-        (function() {
-            var t = localStorage.getItem('theme');
-            if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', t);
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.documentElement.classList.add('reduce-motion');
-            }
-        })();
+        (function(){var t=localStorage.getItem('theme');if(!t)t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);if(window.matchMedia('(prefers-reduced-motion:reduce)').matches)document.documentElement.classList.add('reduce-motion');})();
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar-custom" id="navbar">
-        <div class="nav-inner">
-            <a href="/" class="nav-brand">
-                <div class="nav-logo">
-                    <i class="fab fa-airbnb"></i>
-                </div>
-                <span class="nav-title">Price Predictor</span>
-            </a>
-            <div class="nav-center">
-                <a href="#stats" class="nav-link">Stats</a>
-                <a href="#form" class="nav-link">Predict</a>
-                <a href="#about" class="nav-link">About</a>
-            </div>
-            <div class="nav-end">
-                <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button class="hamburger" id="hamburger" aria-label="Menu">
-                    <span></span><span></span><span></span>
-                </button>
-            </div>
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar-custom" id="navbar">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <div class="nav-logo"><i class="fab fa-airbnb"></i></div>
+            <span class="nav-title">Price Predictor</span>
+        </a>
+        <div class="nav-center">
+            <a href="#hero" class="nav-link">Home</a>
+            <a href="#form" class="nav-link">Predict</a>
+            <a href="#charts" class="nav-link">Analytics</a>
+            <a href="#history" class="nav-link">History</a>
+            <a href="https://github.com/zaidbharde/AIRBNB-PRICE-PREDICTION-" target="_blank" class="nav-link"><i class="fab fa-github"></i> GitHub</a>
         </div>
-    </nav>
-
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-inner">
-            <a href="#stats" class="mobile-link">Stats</a>
-            <a href="#form" class="mobile-link">Predict</a>
-            <a href="#about" class="mobile-link">About</a>
-            <button class="theme-btn" id="themeToggleMobile" aria-label="Toggle theme">
-                <i class="fas fa-moon"></i>
-            </button>
+        <div class="nav-end">
+            <button class="theme-btn" id="themeToggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+            <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
         </div>
     </div>
+</nav>
 
-    <!-- Hero -->
-    <section class="hero" id="hero">
-        <div class="hero-bg">
-            <div class="blob blob-1"></div>
-            <div class="blob blob-2"></div>
-            <div class="blob blob-3"></div>
-        </div>
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge" id="heroBadge">
-                    <i class="fas fa-robot"></i>
-                    <span>AI-Powered Price Prediction</span>
-                </div>
-                <h1 class="hero-title">
-                    <span class="hero-icon">🏠</span>
-                    Airbnb Price Predictor
-                </h1>
-                <p class="hero-subtitle">Predict accurate Airbnb listing prices instantly using Machine Learning. Trusted by thousands of hosts worldwide.</p>
-                <div class="hero-actions">
-                    <a href="#form" class="btn-primary-custom pulse-glow">
-                        <i class="fas fa-wand-magic-sparkles"></i>
-                        Predict Now
-                    </a>
-                    <a href="#stats" class="btn-ghost-custom">
-                        <i class="fas fa-chevron-down"></i>
-                        Learn More
-                    </a>
-                </div>
-                <div class="hero-metrics">
-                    <div class="hero-metric">
-                        <i class="fas fa-database"></i>
-                        <span>100K+ Listings</span>
-                    </div>
-                    <div class="hero-metric">
-                        <i class="fas fa-bolt"></i>
-                        <span>Real-time Results</span>
-                    </div>
-                    <div class="hero-metric">
-                        <i class="fas fa-shield-halved"></i>
-                        <span>95% Accuracy</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="hero-fade"></div>
-    </section>
-
-    <!-- Stats -->
-    <section class="stats" id="stats">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: rgba(255,90,95,0.12); color: #FF5A5F;">
-                        <i class="fas fa-bullseye"></i>
-                    </div>
-                    <div class="stat-body">
-                        <span class="stat-num" data-target="95">0</span>
-                        <span class="stat-sym">%</span>
-                        <span class="stat-label">Model Accuracy</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: rgba(0,108,228,0.12); color: #006CE4;">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <div class="stat-body">
-                        <span class="stat-num" data-target="100">0</span>
-                        <span class="stat-sym">K+</span>
-                        <span class="stat-label">Training Records</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: rgba(124,58,237,0.12); color: #7C3AED;">
-                        <i class="fas fa-sliders"></i>
-                    </div>
-                    <div class="stat-body">
-                        <span class="stat-num" data-target="20">0</span>
-                        <span class="stat-sym">+</span>
-                        <span class="stat-label">Input Features</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: rgba(16,185,129,0.12); color: #10B981;">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="stat-body">
-                        <span class="stat-num" data-target="1">0</span>
-                        <span class="stat-sym">sec</span>
-                        <span class="stat-label">Prediction Time</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Form Section -->
-    <section class="form-section" id="form">
-        <div class="container">
-            <div class="section-header-custom">
-                <span class="section-tag">Enter Details</span>
-                <h2>Property Information</h2>
-                <p>Fill in the details below to get an accurate price prediction for your Airbnb listing.</p>
-            </div>
-
-            <form action="{{url_for('home')}}" method="POST" id="predictionForm" novalidate>
-                <div class="form-grid-custom">
-
-                    <!-- Card 1: Property Information -->
-                    <div class="form-card glass">
-                        <div class="form-card-head">
-                            <div class="card-icon" style="background: rgba(255,90,95,0.12); color: #FF5A5F;">
-                                <i class="fas fa-home"></i>
-                            </div>
-                            <div>
-                                <h3>Property Information</h3>
-                                <p>Basic property and room details</p>
-                            </div>
-                        </div>
-                        <div class="form-card-body">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <div class="floating-group">
-                                        <select name="property_type" id="property_type" class="form-control-custom">
-                                            <option value="Apartment">Apartment</option>
-                                            <option value="Bed & Breakfast">Bed &amp; Breakfast</option>
-                                            <option value="Boat">Boat</option>
-                                            <option value="Boutique hotel">Boutique Hotel</option>
-                                            <option value="Bungalow">Bungalow</option>
-                                        </select>
-                                        <label for="property_type"><i class="fas fa-building"></i> Property Type</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="floating-group">
-                                        <select name="room_type" id="room_type" class="form-control-custom">
-                                            <option value="Entire home/apt">Entire Home / Apt</option>
-                                            <option value="Private room">Private Room</option>
-                                            <option value="Shared room">Shared Room</option>
-                                        </select>
-                                        <label for="room_type"><i class="fas fa-door-open"></i> Room Type</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="floating-group">
-                                        <select name="bed_type" id="bed_type" class="form-control-custom">
-                                            <option value="Real Bed">Real Bed</option>
-                                            <option value="Pull-out Sofa">Pull-out Sofa</option>
-                                            <option value="Futon">Futon</option>
-                                            <option value="Airbed">Airbed</option>
-                                            <option value="Couch">Couch</option>
-                                        </select>
-                                        <label for="bed_type"><i class="fas fa-bed"></i> Bed Type</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="floating-group">
-                                        <select name="city" id="city" class="form-control-custom">
-                                            <option value="NYC">New York</option>
-                                            <option value="LA">Los Angeles</option>
-                                            <option value="SF">San Francisco</option>
-                                            <option value="Boston">Boston</option>
-                                            <option value="Chicago">Chicago</option>
-                                            <option value="DC">Washington, D.C.</option>
-                                        </select>
-                                        <label for="city"><i class="fas fa-location-dot"></i> City</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="floating-group">
-                                        <input type="number" name="latitude" id="latitude" class="form-control-custom" value="0.0" step="0.000001" placeholder=" ">
-                                        <label for="latitude"><i class="fas fa-globe"></i> Latitude</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="floating-group">
-                                        <input type="number" name="longitude" id="longitude" class="form-control-custom" value="0.0" step="0.000001" placeholder=" ">
-                                        <label for="longitude"><i class="fas fa-globe-americas"></i> Longitude</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 2: Accommodation Details -->
-                    <div class="form-card glass">
-                        <div class="form-card-head">
-                            <div class="card-icon" style="background: rgba(0,108,228,0.12); color: #006CE4;">
-                                <i class="fas fa-bed"></i>
-                            </div>
-                            <div>
-                                <h3>Accommodation Details</h3>
-                                <p>Space and capacity information</p>
-                            </div>
-                        </div>
-                        <div class="form-card-body">
-                            <div class="row g-3">
-                                <div class="col-md-3 col-6">
-                                    <div class="floating-group">
-                                        <input type="number" name="bedrooms" id="bedrooms" class="form-control-custom" value="0" min="0" max="10" placeholder=" ">
-                                        <label for="bedrooms"><i class="fas fa-door-closed"></i> Bedrooms</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="floating-group">
-                                        <input type="number" name="beds" id="beds" class="form-control-custom" value="0" min="0" max="18" placeholder=" ">
-                                        <label for="beds"><i class="fas fa-bed"></i> Beds</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="floating-group">
-                                        <input type="number" name="bathrooms" id="bathrooms" class="form-control-custom" value="0" min="0" max="8" placeholder=" ">
-                                        <label for="bathrooms"><i class="fas fa-bath"></i> Bathrooms</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="floating-group">
-                                        <input type="number" name="accommodates" id="accommodates" class="form-control-custom" value="1" min="1" max="16" placeholder=" ">
-                                        <label for="accommodates"><i class="fas fa-users"></i> Accommodates</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 3: Host Information -->
-                    <div class="form-card glass">
-                        <div class="form-card-head">
-                            <div class="card-icon" style="background: rgba(124,58,237,0.12); color: #7C3AED;">
-                                <i class="fas fa-user-check"></i>
-                            </div>
-                            <div>
-                                <h3>Host Information</h3>
-                                <p>Host verification and response details</p>
-                            </div>
-                        </div>
-                        <div class="form-card-body">
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <div class="floating-group">
-                                        <select name="host_identity_verified" id="host_identity_verified" class="form-control-custom">
-                                            <option value="t">Yes</option>
-                                            <option value="f">No</option>
-                                        </select>
-                                        <label for="host_identity_verified"><i class="fas fa-shield-halved"></i> Verified Host</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="floating-group">
-                                        <select name="host_has_profile_pic" id="host_has_profile_pic" class="form-control-custom">
-                                            <option value="t">Yes</option>
-                                            <option value="f">No</option>
-                                        </select>
-                                        <label for="host_has_profile_pic"><i class="fas fa-camera"></i> Profile Picture</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="floating-group">
-                                        <input type="number" name="host_response_rate" id="host_response_rate" class="form-control-custom" value="0" min="0" max="100" placeholder=" ">
-                                        <label for="host_response_rate"><i class="fas fa-clock"></i> Response Rate</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 4: Booking Details -->
-                    <div class="form-card glass">
-                        <div class="form-card-head">
-                            <div class="card-icon" style="background: rgba(255,149,0,0.12); color: #FF9500;">
-                                <i class="fas fa-credit-card"></i>
-                            </div>
-                            <div>
-                                <h3>Booking Details</h3>
-                                <p>Cancellation, fees, and booking preferences</p>
-                            </div>
-                        </div>
-                        <div class="form-card-body">
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <div class="floating-group">
-                                        <select name="cancellation_policy" id="cancellation_policy" class="form-control-custom">
-                                            <option value="flexible">Flexible</option>
-                                            <option value="moderate">Moderate</option>
-                                            <option value="strict">Strict</option>
-                                            <option value="super_strict_30">Super Strict 30</option>
-                                            <option value="super_strict_60">Super Strict 60</option>
-                                        </select>
-                                        <label for="cancellation_policy"><i class="fas fa-rotate-left"></i> Cancellation</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="floating-group">
-                                        <select name="cleaning_fee" id="cleaning_fee" class="form-control-custom">
-                                            <option value="True">Yes</option>
-                                            <option value="False">No</option>
-                                        </select>
-                                        <label for="cleaning_fee"><i class="fas fa-sparkles"></i> Cleaning Fee</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="floating-group">
-                                        <select name="instant_bookable" id="instant_bookable" class="form-control-custom">
-                                            <option value="t">Yes</option>
-                                            <option value="f">No</option>
-                                        </select>
-                                        <label for="instant_bookable"><i class="fas fa-bolt"></i> Instant Booking</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 5: Reviews & Amenities -->
-                    <div class="form-card glass">
-                        <div class="form-card-head">
-                            <div class="card-icon" style="background: rgba(255,59,48,0.12); color: #FF3B30;">
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div>
-                                <h3>Reviews &amp; Amenities</h3>
-                                <p>Listing rating, review count, and amenities</p>
-                            </div>
-                        </div>
-                        <div class="form-card-body">
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <div class="floating-group">
-                                        <input type="number" name="review_scores_rating" id="review_scores_rating" class="form-control-custom" value="0" min="0" max="100" placeholder=" ">
-                                        <label for="review_scores_rating"><i class="fas fa-star-half-stroke"></i> Review Rating</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="floating-group">
-                                        <input type="number" name="number_of_reviews" id="number_of_reviews" class="form-control-custom" value="0" min="0" max="1000" placeholder=" ">
-                                        <label for="number_of_reviews"><i class="fas fa-comments"></i> Number of Reviews</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="floating-group">
-                                        <input type="number" name="amenities" id="amenities" class="form-control-custom" value="2" min="2" max="1496" placeholder=" ">
-                                        <label for="amenities"><i class="fas fa-list-check"></i> Amenities</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Form Actions -->
-                <div class="form-actions">
-                    <button type="submit" class="btn-predict-custom" id="predictBtn">
-                        <span class="btn-text"><i class="fas fa-wand-magic-sparkles"></i> Predict Price</span>
-                        <span class="btn-loading" style="display:none">
-                            <span class="spinner"><i class="fas fa-circle-notch fa-spin"></i></span>
-                            Analyzing...
-                        </span>
-                    </button>
-                    <button type="reset" class="btn-reset-custom" id="resetBtn">
-                        <i class="fas fa-rotate-left"></i>
-                        Reset Form
-                    </button>
-                </div>
-            </form>
-        </div>
-    </section>
-
-    <!-- Result Section -->
-    {% if final_result is defined and final_result is not none %}
-    <section class="result-section" id="result">
-        <div class="container">
-            <div class="section-header-custom">
-                <span class="section-tag" style="background: rgba(16,185,129,0.12); color: #10B981;">
-                    <i class="fas fa-circle-check"></i> Prediction Complete
-                </span>
-                <h2>Your Price Estimate</h2>
-            </div>
-
-            <div class="result-card-custom">
-                <div class="result-glow"></div>
-                <div class="result-body">
-                    <div class="result-top">
-                        <div class="result-badge">
-                            <i class="fas fa-arrow-trend-up"></i>
-                            Excellent Price
-                        </div>
-                        <span class="result-confidence">
-                            <i class="fas fa-shield-halved"></i>
-                            Confidence: 96%
-                        </span>
-                    </div>
-
-                    <div class="result-price-wrap">
-                        <span class="result-currency">$</span>
-                        <span class="result-amount" id="resultAmount">{{ final_result }}</span>
-                    </div>
-
-                    <div class="result-gauge">
-                        <div class="gauge-track">
-                            <div class="gauge-fill" id="gaugeFill" style="width: 0%"></div>
-                            <div class="gauge-dot" id="gaugeDot" style="left: 0%"></div>
-                        </div>
-                        <div class="gauge-labels">
-                            <span>$0</span>
-                            <span>Budget</span>
-                            <span>$125</span>
-                            <span>Moderate</span>
-                            <span>$250</span>
-                            <span>Premium</span>
-                            <span>$375</span>
-                            <span>Luxury</span>
-                            <span>$500</span>
-                        </div>
-                    </div>
-
-                    <div class="result-summary">
-                        <div class="summary-item">
-                            <i class="fas fa-check-circle" style="color: #10B981;"></i>
-                            <span>Based on market analysis of similar listings</span>
-                        </div>
-                        <div class="summary-item">
-                            <i class="fas fa-check-circle" style="color: #10B981;"></i>
-                            <span>ML model trained on 100K+ historical records</span>
-                        </div>
-                        <div class="summary-item">
-                            <i class="fas fa-check-circle" style="color: #10B981;"></i>
-                            <span>Prediction updated with latest market trends</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    {% endif %}
-
-    <!-- About Section -->
-    <section class="about-section" id="about">
-        <div class="container">
-            <div class="section-header-custom">
-                <span class="section-tag">Technology</span>
-                <h2>Built with Modern ML Stack</h2>
-            </div>
-            <div class="tech-grid">
-                <div class="tech-card">
-                    <i class="fab fa-python"></i>
-                    <span>Python</span>
-                </div>
-                <div class="tech-card">
-                    <i class="fas fa-server"></i>
-                    <span>Flask</span>
-                </div>
-                <div class="tech-card">
-                    <i class="fas fa-brain"></i>
-                    <span>Machine Learning</span>
-                </div>
-                <div class="tech-card">
-                    <i class="fas fa-cubes"></i>
-                    <span>Scikit-Learn</span>
-                </div>
-                <div class="tech-card">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>CatBoost</span>
-                </div>
-                <div class="tech-card">
-                    <i class="fas fa-database"></i>
-                    <span>Pandas</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer-custom">
-        <div class="container">
-            <div class="footer-inner-custom">
-                <div class="footer-brand">
-                    <i class="fab fa-airbnb"></i>
-                    <span>Airbnb Price Predictor</span>
-                </div>
-                <p class="footer-text">Built with <i class="fas fa-heart" style="color: #FF5A5F;"></i> for Airbnb hosts worldwide</p>
-                <div class="footer-links">
-                    <span>Python</span>
-                    <span class="dot">·</span>
-                    <span>Flask</span>
-                    <span class="dot">·</span>
-                    <span>Scikit-Learn</span>
-                    <span class="dot">·</span>
-                    <span>CatBoost</span>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scroll to Top -->
-    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
-        <i class="fas fa-arrow-up"></i>
-    </button>
-
-    <!-- Toast -->
-    <div class="toast-custom" id="toast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastMsg">Ready to predict!</span>
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-inner">
+        <a href="#hero" class="mobile-link">Home</a>
+        <a href="#form" class="mobile-link">Predict</a>
+        <a href="#charts" class="mobile-link">Analytics</a>
+        <a href="#history" class="mobile-link">History</a>
+        <a href="https://github.com/zaidbharde/AIRBNB-PRICE-PREDICTION-" target="_blank" class="mobile-link"><i class="fab fa-github"></i> GitHub</a>
+        <button class="theme-btn" id="themeToggleMobile"><i class="fas fa-moon"></i></button>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{url_for('static', filename='main.js')}}"></script>
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+    <div class="hero-bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-badge"><i class="fas fa-robot"></i> AI-Powered Price Prediction</div>
+            <h1 class="hero-title">🏠 Airbnb Price Predictor</h1>
+            <p class="hero-subtitle">Predict Airbnb listing prices with machine learning in seconds. Trusted by thousands of hosts to set competitive rates and maximize earnings.</p>
+            <div class="hero-actions">
+                <a href="#form" class="btn-p pglow"><i class="fas fa-wand-magic-sparkles"></i> Start Prediction</a>
+                <a href="#charts" class="btn-g"><i class="fas fa-chevron-down"></i> View Documentation</a>
+            </div>
+            <div class="hero-strip">
+                <span><i class="fas fa-database"></i> 100K+ Listings</span>
+                <span><i class="fas fa-bolt"></i> Real-time</span>
+                <span><i class="fas fa-shield-halved"></i> 95% Accuracy</span>
+            </div>
+        </div>
+    </div>
+    <div class="hero-fade"></div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="sec-stats" id="stats">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="s-card"><div class="s-icon" style="background:rgba(255,90,95,0.12);color:#FF5A5F"><i class="fas fa-bullseye"></i></div><div class="s-body"><span class="s-num" data-t="95">0</span><span class="s-sym">%</span><span class="s-lbl">Model Accuracy</span></div></div>
+            <div class="s-card"><div class="s-icon" style="background:rgba(0,108,228,0.12);color:#006CE4"><i class="fas fa-layer-group"></i></div><div class="s-body"><span class="s-num" data-t="100">0</span><span class="s-sym">K+</span><span class="s-lbl">Training Records</span></div></div>
+            <div class="s-card"><div class="s-icon" style="background:rgba(124,58,237,0.12);color:#7C3AED"><i class="fas fa-sliders"></i></div><div class="s-body"><span class="s-num" data-t="20">0</span><span class="s-sym">+</span><span class="s-lbl">Input Features</span></div></div>
+            <div class="s-card"><div class="s-icon" style="background:rgba(16,185,129,0.12);color:#10B981"><i class="fas fa-clock"></i></div><div class="s-body"><span class="s-num" data-t="1">0</span><span class="s-sym">sec</span><span class="s-lbl">Prediction Time</span></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FORM ===== -->
+<section class="sec-form" id="form">
+    <div class="container">
+        <div class="sec-hdr"><span class="sec-tag">Enter Details</span><h2>Property Information</h2><p>Fill in the details below to get an accurate price prediction for your Airbnb listing.</p></div>
+
+        <form action="{{url_for('home')}}" method="POST" id="pf" novalidate>
+            <div class="f-grid">
+
+                <!-- 1: Property -->
+                <div class="f-card glass">
+                    <div class="f-head"><div class="f-icon" style="background:rgba(255,90,95,0.12);color:#FF5A5F"><i class="fas fa-home"></i></div><div><h3>Property Details</h3><p>Type, room, and bed configuration</p></div></div>
+                    <div class="f-body"><div class="row g-3">
+                        <div class="col-md-6"><div class="fl-group"><select name="property_type" id="property_type" class="fi"><option value="Apartment">Apartment</option><option value="Bed & Breakfast">Bed &amp; Breakfast</option><option value="Boat">Boat</option><option value="Boutique hotel">Boutique Hotel</option><option value="Bungalow">Bungalow</option></select><label for="property_type"><i class="fas fa-building"></i> Property Type</label></div></div>
+                        <div class="col-md-6"><div class="fl-group"><select name="room_type" id="room_type" class="fi"><option value="Entire home/apt">Entire Home / Apt</option><option value="Private room">Private Room</option><option value="Shared room">Shared Room</option></select><label for="room_type"><i class="fas fa-door-open"></i> Room Type</label></div></div>
+                        <div class="col-md-6"><div class="fl-group"><select name="bed_type" id="bed_type" class="fi"><option value="Real Bed">Real Bed</option><option value="Pull-out Sofa">Pull-out Sofa</option><option value="Futon">Futon</option><option value="Airbed">Airbed</option><option value="Couch">Couch</option></select><label for="bed_type"><i class="fas fa-bed"></i> Bed Type</label></div></div>
+                    </div></div>
+                </div>
+
+                <!-- 2: Accommodation -->
+                <div class="f-card glass">
+                    <div class="f-head"><div class="f-icon" style="background:rgba(0,108,228,0.12);color:#006CE4"><i class="fas fa-bed"></i></div><div><h3>Accommodation</h3><p>Space, capacity, and rooms</p></div></div>
+                    <div class="f-body"><div class="row g-3">
+                        <div class="col-6 col-md-3"><div class="fl-group"><input type="number" name="bedrooms" id="bedrooms" class="fi" value="0" min="0" max="10" placeholder=" "><label for="bedrooms"><i class="fas fa-door-closed"></i> Bedrooms</label></div></div>
+                        <div class="col-6 col-md-3"><div class="fl-group"><input type="number" name="beds" id="beds" class="fi" value="0" min="0" max="18" placeholder=" "><label for="beds"><i class="fas fa-bed"></i> Beds</label></div></div>
+                        <div class="col-6 col-md-3"><div class="fl-group"><input type="number" name="bathrooms" id="bathrooms" class="fi" value="0" min="0" max="8" placeholder=" "><label for="bathrooms"><i class="fas fa-bath"></i> Bathrooms</label></div></div>
+                        <div class="col-6 col-md-3"><div class="fl-group"><input type="number" name="accommodates" id="accommodates" class="fi" value="1" min="1" max="16" placeholder=" "><label for="accommodates"><i class="fas fa-users"></i> Accommodates</label></div></div>
+                    </div></div>
+                </div>
+
+                <!-- 3: Host -->
+                <div class="f-card glass">
+                    <div class="f-head"><div class="f-icon" style="background:rgba(124,58,237,0.12);color:#7C3AED"><i class="fas fa-user-check"></i></div><div><h3>Host</h3><p>Verification and responsiveness</p></div></div>
+                    <div class="f-body"><div class="row g-3">
+                        <div class="col-md-4"><div class="fl-group"><select name="host_identity_verified" id="host_identity_verified" class="fi"><option value="t">Yes</option><option value="f">No</option></select><label for="host_identity_verified"><i class="fas fa-shield-halved"></i> Verified Host</label></div></div>
+                        <div class="col-md-4"><div class="fl-group"><select name="host_has_profile_pic" id="host_has_profile_pic" class="fi"><option value="t">Yes</option><option value="f">No</option></select><label for="host_has_profile_pic"><i class="fas fa-camera"></i> Profile Picture</label></div></div>
+                        <div class="col-md-4"><div class="fl-group"><input type="number" name="host_response_rate" id="host_response_rate" class="fi" value="0" min="0" max="100" placeholder=" "><label for="host_response_rate"><i class="fas fa-clock"></i> Response Rate</label></div></div>
+                    </div></div>
+                </div>
+
+                <!-- 4: Location -->
+                <div class="f-card glass">
+                    <div class="f-head"><div class="f-icon" style="background:rgba(16,185,129,0.12);color:#10B981"><i class="fas fa-location-dot"></i></div><div><h3>Location</h3><p>City and geographic coordinates</p></div></div>
+                    <div class="f-body"><div class="row g-3">
+                        <div class="col-md-6"><div class="fl-group"><select name="city" id="city" class="fi"><option value="NYC">New York</option><option value="LA">Los Angeles</option><option value="SF">San Francisco</option><option value="Boston">Boston</option><option value="Chicago">Chicago</option><option value="DC">Washington, D.C.</option></select><label for="city"><i class="fas fa-city"></i> City</label></div></div>
+                        <div class="col-md-3"><div class="fl-group"><input type="number" name="latitude" id="latitude" class="fi" value="0.0" step="0.000001" placeholder=" "><label for="latitude"><i class="fas fa-globe"></i> Latitude</label></div></div>
+                        <div class="col-md-3"><div class="fl-group"><input type="number" name="longitude" id="longitude" class="fi" value="0.0" step="0.000001" placeholder=" "><label for="longitude"><i class="fas fa-globe-americas"></i> Longitude</label></div></div>
+                    </div></div>
+                </div>
+
+                <!-- 5: Booking + Reviews -->
+                <div class="f-card glass">
+                    <div class="f-head"><div class="f-icon" style="background:rgba(255,149,0,0.12);color:#FF9500"><i class="fas fa-credit-card"></i></div><div><h3>Booking &amp; Reviews</h3><p>Policies, fees, ratings, and amenities</p></div></div>
+                    <div class="f-body"><div class="row g-3">
+                        <div class="col-md-4"><div class="fl-group"><select name="cancellation_policy" id="cancellation_policy" class="fi"><option value="flexible">Flexible</option><option value="moderate">Moderate</option><option value="strict">Strict</option><option value="super_strict_30">Super Strict 30</option><option value="super_strict_60">Super Strict 60</option></select><label for="cancellation_policy"><i class="fas fa-rotate-left"></i> Cancellation</label></div></div>
+                        <div class="col-md-4"><div class="fl-group"><select name="cleaning_fee" id="cleaning_fee" class="fi"><option value="True">Yes</option><option value="False">No</option></select><label for="cleaning_fee"><i class="fas fa-sparkles"></i> Cleaning Fee</label></div></div>
+                        <div class="col-md-4"><div class="fl-group"><select name="instant_bookable" id="instant_bookable" class="fi"><option value="t">Yes</option><option value="f">No</option></select><label for="instant_bookable"><i class="fas fa-bolt"></i> Instant Booking</label></div></div>
+                        <div class="col-md-4"><div class="fl-group"><input type="number" name="review_scores_rating" id="review_scores_rating" class="fi" value="0" min="0" max="100" placeholder=" "><label for="review_scores_rating"><i class="fas fa-star-half-stroke"></i> Review Rating</label></div></div>
+                        <div class="col-md-4"><div class="fl-group"><input type="number" name="number_of_reviews" id="number_of_reviews" class="fi" value="0" min="0" max="1000" placeholder=" "><label for="number_of_reviews"><i class="fas fa-comments"></i> Number of Reviews</label></div></div>
+                        <div class="col-md-4"><div class="fl-group"><input type="number" name="amenities" id="amenities" class="fi" value="2" min="2" max="1496" placeholder=" "><label for="amenities"><i class="fas fa-list-check"></i> Amenities</label></div></div>
+                    </div></div>
+                </div>
+
+            </div>
+
+            <div class="f-acts">
+                <button type="submit" class="btn-pred" id="predBtn">
+                    <span class="bt-txt"><i class="fas fa-wand-magic-sparkles"></i> Predict Price</span>
+                    <span class="bt-load" style="display:none"><i class="fas fa-circle-notch fa-spin"></i> Analyzing...</span>
+                </button>
+                <button type="reset" class="btn-rst" id="rstBtn"><i class="fas fa-rotate-left"></i> Reset</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- ===== LOADING OVERLAY ===== -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-dialog">
+        <div class="loading-spinner"><i class="fas fa-circle-notch fa-spin"></i></div>
+        <div class="loading-text" id="loadingText">AI is analyzing your property...</div>
+        <div class="loading-dots"><span></span><span></span><span></span></div>
+        <div class="loading-bar"><div class="loading-bar-fill" id="loadingBarFill"></div></div>
+    </div>
+</div>
+
+<!-- ===== RESULT DASHBOARD ===== -->
+{% if final_result is defined and final_result is not none %}
+<section class="sec-result" id="result">
+    <div class="container">
+        <div class="sec-hdr"><span class="sec-tag" style="background:rgba(16,185,129,0.12);color:#10B981"><i class="fas fa-circle-check"></i> Prediction Complete</span><h2>Your Price Estimate</h2></div>
+
+        <div class="result-dash">
+            <div class="r-glow"></div>
+            <div class="r-body">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-7">
+                        <div class="r-top">
+                            <span class="r-badge"><i class="fas fa-arrow-trend-up"></i> Excellent Price</span>
+                            <span class="r-conf"><i class="fas fa-shield-halved"></i> Confidence: 96%</span>
+                        </div>
+                        <div class="r-price"><span class="r-cur">$</span><span class="r-amt" id="rAmt">{{ final_result }}</span></div>
+                        <div class="r-gauge"><div class="g-track"><div class="g-fill" id="gFill" style="width:0%"></div><div class="g-dot" id="gDot" style="left:0%"></div></div><div class="g-lbls"><span>$0 Budget</span><span>$125</span><span>$250 Moderate</span><span>$375</span><span>$500 Luxury</span></div></div>
+                        <div class="r-rev row g-3 mt-2">
+                            <div class="col-4"><div class="rev-card"><i class="fas fa-calendar-day"></i><span class="rev-lbl">Nightly</span><span class="rev-val" id="revNight">$0</span></div></div>
+                            <div class="col-4"><div class="rev-card"><i class="fas fa-calendar"></i><span class="rev-lbl">Monthly</span><span class="rev-val" id="revMonth">$0</span></div></div>
+                            <div class="col-4"><div class="rev-card"><i class="fas fa-calendar-alt"></i><span class="rev-lbl">Yearly</span><span class="rev-val" id="revYear">$0</span></div></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="r-actions">
+                            <button class="r-act" onclick="window.print()"><i class="fas fa-file-pdf"></i> Print Report</button>
+                            <button class="r-act" id="shareBtn"><i class="fas fa-share-nodes"></i> Share</button>
+                            <button class="r-act" id="favBtn"><i class="fas fa-heart"></i> Save</button>
+                        </div>
+                        <div class="r-summary mt-3">
+                            <div class="sum-item"><i class="fas fa-check-circle" style="color:#10B981"></i> Market analysis of similar listings</div>
+                            <div class="sum-item"><i class="fas fa-check-circle" style="color:#10B981"></i> ML model trained on 100K+ records</div>
+                            <div class="sum-item"><i class="fas fa-check-circle" style="color:#10B981"></i> Prediction reflects current market trends</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Feature Importance -->
+<section class="sec-feat">
+    <div class="container">
+        <div class="sec-hdr"><span class="sec-tag">Analysis</span><h2>Feature Importance</h2><p>Top factors influencing this prediction</p></div>
+        <div class="feat-grid" id="featGrid">
+            <div class="feat-item"><span class="feat-lbl"><i class="fas fa-location-dot"></i> Location</span><div class="feat-bar"><div class="feat-fill" data-w="92"></div></div><span class="feat-pct">92%</span></div>
+            <div class="feat-item"><span class="feat-lbl"><i class="fas fa-home"></i> Property Type</span><div class="feat-bar"><div class="feat-fill" data-w="78"></div></div><span class="feat-pct">78%</span></div>
+            <div class="feat-item"><span class="feat-lbl"><i class="fas fa-bed"></i> Bedrooms</span><div class="feat-bar"><div class="feat-fill" data-w="65"></div></div><span class="feat-pct">65%</span></div>
+            <div class="feat-item"><span class="feat-lbl"><i class="fas fa-star"></i> Review Rating</span><div class="feat-bar"><div class="feat-fill" data-w="54"></div></div><span class="feat-pct">54%</span></div>
+            <div class="feat-item"><span class="feat-lbl"><i class="fas fa-rotate-left"></i> Cancellation Policy</span><div class="feat-bar"><div class="feat-fill" data-w="41"></div></div><span class="feat-pct">41%</span></div>
+            <div class="feat-item"><span class="feat-lbl"><i class="fas fa-users"></i> Accommodates</span><div class="feat-bar"><div class="feat-fill" data-w="33"></div></div><span class="feat-pct">33%</span></div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ===== CHARTS ===== -->
+<section class="sec-charts" id="charts">
+    <div class="container">
+        <div class="sec-hdr"><span class="sec-tag">Analytics</span><h2>Market Insights</h2><p>Data-driven trends from 100K+ Airbnb listings</p></div>
+        <div class="row g-4">
+            <div class="col-lg-6"><div class="chart-card"><div class="chart-head"><i class="fas fa-chart-bar"></i><h4>Price Distribution</h4></div><div class="chart-body"><canvas id="priceChart"></canvas></div></div></div>
+            <div class="col-lg-6"><div class="chart-card"><div class="chart-head"><i class="fas fa-map-pin"></i><h4>Location Impact</h4></div><div class="chart-body"><canvas id="locationChart"></canvas></div></div></div>
+            <div class="col-lg-6"><div class="chart-card"><div class="chart-head"><i class="fas fa-star"></i><h4>Review Impact on Price</h4></div><div class="chart-body"><canvas id="reviewChart"></canvas></div></div></div>
+            <div class="col-lg-6"><div class="chart-card"><div class="chart-head"><i class="fas fa-bed"></i><h4>Price by Property Type</h4></div><div class="chart-body"><canvas id="propertyChart"></canvas></div></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== PREDICTION HISTORY ===== -->
+<section class="sec-history" id="history">
+    <div class="container">
+        <div class="sec-hdr"><span class="sec-tag">Records</span><h2>Prediction History</h2><p>Your recent property appraisals</p></div>
+        <div class="hist-toolbar">
+            <div class="hist-search"><i class="fas fa-search"></i><input type="text" id="histSearch" placeholder="Search by property type or city..."></div>
+            <button class="btn-export" id="exportBtn"><i class="fas fa-file-csv"></i> Export CSV</button>
+            <button class="btn-clear-hist" id="clearHistBtn"><i class="fas fa-trash-can"></i> Clear</button>
+        </div>
+        <div class="hist-table-wrap">
+            <table class="hist-table">
+                <thead><tr><th>Date</th><th>Property</th><th>Location</th><th>Price</th><th>Confidence</th><th></th></tr></thead>
+                <tbody id="histBody"><tr><td colspan="6" class="hist-empty">No predictions yet. Use the form above to get started.</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ===== ABOUT / TECH ===== -->
+<section class="sec-tech" id="about">
+    <div class="container">
+        <div class="sec-hdr"><span class="sec-tag">Stack</span><h2>Built with Modern ML Stack</h2></div>
+        <div class="tech-grid">
+            <div class="t-card"><i class="fab fa-python"></i><span>Python</span></div>
+            <div class="t-card"><i class="fas fa-server"></i><span>Flask</span></div>
+            <div class="t-card"><i class="fas fa-brain"></i><span>Machine Learning</span></div>
+            <div class="t-card"><i class="fas fa-cubes"></i><span>Scikit-Learn</span></div>
+            <div class="t-card"><i class="fas fa-chart-bar"></i><span>CatBoost</span></div>
+            <div class="t-card"><i class="fas fa-database"></i><span>Pandas</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+    <div class="container">
+        <div class="f-inner">
+            <div class="f-brand"><i class="fab fa-airbnb"></i> Airbnb Price Predictor</div>
+            <p class="f-text">Built with <i class="fas fa-heart" style="color:#FF5A5F"></i> for Airbnb hosts worldwide</p>
+            <div class="f-links">
+                <a href="https://github.com/zaidbharde/AIRBNB-PRICE-PREDICTION-" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                <span class="dot">·</span>
+                <span>Python</span><span class="dot">·</span>
+                <span>Flask</span><span class="dot">·</span>
+                <span>Scikit-Learn</span><span class="dot">·</span>
+                <span>Chart.js</span>
+            </div>
+            <p class="f-copy">&copy; 2026 Airbnb Price Predictor. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- ===== FLOATING ===== -->
+<button class="scroll-top" id="scrollTop"><i class="fas fa-arrow-up"></i></button>
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMsg">Ready!</span></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="{{url_for('static',filename='main.js')}}"></script>
 </body>
 </html>
